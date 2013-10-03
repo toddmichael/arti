@@ -1,7 +1,7 @@
 require 'faraday'
 
 module Arti
-  class Connection
+  class Client
     attr_reader :conn
     def initialize(args)
       @endpoint = args[:endpoint]
@@ -18,6 +18,15 @@ module Arti
 
     def get(uri)
       conn.get(uri)
+    end
+
+    def download(args)
+      @uri = args[:uri]
+      @file = args[:file]
+
+      File.open(@file, "w") do |file|
+        file.write(self.get(@uri).body)
+      end
     end
   end
 end
